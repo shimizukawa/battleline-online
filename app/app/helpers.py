@@ -2,9 +2,10 @@
 from google.appengine.ext import db
 from google.appengine.api import users
 from app.models import Game, GameUser
-import os,time
+import os
+import time
 
-from google.appengine.ext.webapp import template
+from lib import template
 
 from lib.utils import *
 
@@ -41,7 +42,7 @@ class Helper(object):
     def progress_time(self, game):
         if game.rounds.count() == 0:
             return '0:00:00'
-        secs = time.time() - game.rounds[0].created_at
+        secs = time.time() - time.mktime(game.rounds[0].created_at.timetuple())
         h = secs / 3600
         m = secs / 60 % 60
         s = secs % 60
@@ -70,7 +71,7 @@ class Helper(object):
         name = self.controller._controller_name
         filename = '_card.html'
         viewpath = os.path.join(apppath, 'views', name, filename)
-        values = { 'front': front, }
+        values = {'helper': self, 'front': front,}
         if index is None or card is None:
             values['card'] = card
         else:
@@ -116,11 +117,11 @@ class Helper(object):
         for n,flag in enumerate(round.flags):
             cls = ['flagline']
             if player is None:
-                f = (flag == -1) and '●' or ''
+                f = (flag == -1) and u'●' or ''
                 f = "%d%s" % (n+1, f)
                 cls.append('centerline')
             else:
-                f = (flag == player.side) and '●' or ''
+                f = (flag == player.side) and u'●' or ''
             if flag >= 0:
                 cls.append("player-%d" % flag)
             results.append('<td class="%s"><span>%s</span></td>' % (
@@ -213,16 +214,17 @@ class Helper(object):
 #   def provable_lines
 #     (1..9).find_all{|n| !@round.line_proved n}
 #   end
-# 
-#   def recent_play_style card
-#     rounds = [@round, @round.prev, (@round.prev.prev rescue nil)].find_all{|r|r.process[:PlayCardState] rescue false}
-#     rounds[0..1].each do |round|
-#       if round.is_recent_used card
-#         return "card-recent-play player-#{round.current_side}"
-#       end
-#     end
-#   end
-# 
+ 
+    def recent_play_style(self, card):
+        round = self.context.get('round')
+        return ''
+        # rounds = [@round, @round.prev, (@round.prev.prev rescue nil)].find_all{|r|r.process[:PlayCardState] rescue false}
+        # rounds[0..1].each do |round|
+        #   if round.is_recent_used card
+        #     return "card-recent-play player-#{round.current_side}"
+        #   end
+        # end
+
 #   def card_view round, card
 #     render_card card, round.is_my_side
 #   end

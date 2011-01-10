@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from google.appengine.ext import db
-from google.appengine.ext.db import polymodel
 import re
 
 
@@ -23,28 +21,8 @@ PLOT_CARDS = ['SCOUT', 'REDEPLOY', 'DESERTER', 'TRAITOR']
 TACTICS_CARDS = (SPIRIT_CARDS + WEATHER_CARDS + PLOT_CARDS)
 
 
-class Card(polymodel.PolyModel):
-    name = db.StringProperty()
-
-    @staticmethod
-    def create_troops():
-        q = TroopCard.all()
-        if q.count() == 0:
-            r = [Card.new_by_name('%s%d' % (c, n))
-                 for c in 'ABCDEF'
-                 for n in range(1,11)]
-        else:
-            r = [x for x in q]
-        return r
-
-    @staticmethod
-    def create_tactics():
-        q = TacticsCard.all()
-        if q.count() == 0:
-            r = [Card.new_by_name(name) for name in TACTICS_CARDS]
-        else:
-            r = [x for x in q]
-        return r
+class Card(object):
+    name = ''
 
     @staticmethod
     def new_by_name(name):
@@ -52,7 +30,6 @@ class Card(polymodel.PolyModel):
             card = TACTICS_CARD_CLASSES[name]()
         else:
             card = TroopCard(name=name)
-        card.put()
         return card
 
     @property
@@ -105,6 +82,9 @@ class Card(polymodel.PolyModel):
 
 class TroopCard(Card):
 
+    def __init__(self, name):
+        self.name = name
+
     def __str__(self):
         return '%s%d' % (self.color, self.number)
 
@@ -132,12 +112,10 @@ class TacticsCard(Card):
 
 
 class SpiritCard(TacticsCard):
-    role = db.ReferenceProperty(TroopCard)
+    role = ''
 
     def __str__(self):
-        label = self.name
-        label += self.role and ("(%s)" % self.role) or ''
-        return label
+        return self.name
 
     def __cmp__(self, other):
         if other.is_troop:
@@ -244,3 +222,74 @@ TACTICS_CARD_CLASSES = {
     'DESERTER': DeserterCard,
     'TRAITOR': TraitorCard,
 }
+
+def create_troops():
+    return [Card.new_by_name('%s%d' % (c, n))
+            for c in 'ABCDEF'
+            for n in range(1,11)]
+
+def create_tactics():
+    return [Card.new_by_name(name) for name in TACTICS_CARDS]
+
+
+TROOPS = create_troops()
+TACTICS = create_tactics()
+
+CARD_DICT = dict([(c.name, c) for c in TROOPS])
+CARD_DICT.update(dict([(c.name, c) for c in TACTICS]))
+
+
+
+
+
+
+#=======================================================================
+
+
+class CardList(object):
+    def __init__(self, parent, name):
+        self.__parent__ = parent
+        self.__name__ = name
+        self.cards = getattr(parent, name)
+
+    def __getitem__(self, index):
+        return CARD_DICT[self.cards[index]]
+
+    def __setitem__(self, index, obj):
+        getattr(self.__parent__, self.__name__)[index] = obj.name
+        self.cards[index] = obj.name
+
+    def __iter__(self):
+        return (CARD_DICT[name] for name in getattr(self.__parent__, self.__name__))
+
+    def __len__(self):
+        return len(self.cards)
+
+    @property
+    def size(self):
+        """ compatible to db.ListProperty query object attribute """
+        return len(self)
+
+    def pop(self, index):
+        return CARD_DICT[self.cards.pop(index)]
+
+    def append(self, obj):
+        return self.cards.append(obj.name)
+
+    def remove(self, obj):
+        return self.cards.remove(obj.name)
+
+    def insert(self, index, obj):
+        return self.cards.insert(index, obj.name)
+
+
+class CardListProperty(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, instance, klass):
+        return CardList(instance, self.name)
+
+    def __set__(self, instance, value):
+        setattr(instance, self.name, [obj.name for obj in value])
+

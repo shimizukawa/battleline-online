@@ -1,0 +1,16 @@
+<div id="information" class="information">
+    {% if flash['notice'] %}
+    <div class="notice">{{ flash['notice'] }}</div>
+    {% endif %}
+
+    {% if flash['error'] %}
+    <div class="error">{{ flash['error'] }}</div>
+    {% endif %}
+
+    {% if game.is_closed %}
+    <div class="notice">
+        ゲーム終了。勝者 <strong>{{ game.winner.name }}</strong>.
+        <a href="/lobby">'ロビーに戻る'</a>
+    </div>
+    {% endif %}
+</div>

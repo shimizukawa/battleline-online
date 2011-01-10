@@ -1,0 +1,22 @@
+<dl class="block">
+  <dd>
+    <div>
+      <%= select_tag :proveline, options_for_select(provable_lines) if provable? %>
+      <%= submit_tag2 'proof', :disabled => !provable?, :onclick => "return #{confirm_javascript_function("確保宣言しますか？")}" %>
+    </div>
+    <%- if @round.state? ProofJudgeState -%>
+    <dl>
+      <dt>Line(<%= proving_line %>) の確保宣言。判定中...</dt>
+    </dl>
+    <%- end -%>
+    <%- if need_to_judge? -%>
+    <dl>
+      <dt>了承しますか？</dt>
+      <dd>
+        <%= submit_tag2 'agree' %>
+        <%= submit_tag2 'disagree' %>
+      </dd>
+    </dl>
+    <%- end -%>
+  </dd>
+</dl>

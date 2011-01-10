@@ -1,0 +1,43 @@
+{{round.current_side}}
+{{player.side}}
+{{player.s_turn()}}
+{{player.is_playable()}}
+{% if 1 %}
+very slow
+{{player.usable_cards()}}
+{% endif %}
+
+<dl class="block hand player-{{ player.side }}">
+  {% if game.is_closed or not player.s_turn() %}
+    <dt>{{ player.name() }} 手札</dt>
+  {% else %}
+    <dt class="notice">★★ {{ player.name() }} の番です ★★</dt>
+  {% endif %}
+  <dd class="hand-cards"><ul>
+    {% for card in player.hand %}
+      <li><label>
+        {{ helper.render_card(card, 1) }}
+        {% if player.is_playable %}
+          {% if card.is_usable(player) %}
+          <input type="radio" name="selectcard" value="{{card}}">
+          {% endif %}
+        {% endif %}
+      </label></li>
+    {% endfor %}
+  </ul></dd>
+  <dd class="play-button">
+    {% if player.is_playable %}
+      <input type="submit" name="play card" value="play card">
+    {% else %}
+      <input type="submit" name="play card" value="play card" disabled="disabled">
+    {% endif %}
+  </dd>
+  <dd class="skip-button">
+    {% if helper.is_can_skip %}
+       <input type="submit" name="skip" value="skip">
+    {% endif %}
+  </dd>
+  <dd class="tactics-count">戦術カード使用数 {{ player.tactics_count }}</dd>
+  <dd class="clear"></dd>
+</dl>
+

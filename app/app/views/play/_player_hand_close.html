@@ -1,0 +1,24 @@
+{{round.current_side}}
+{{player.side}}
+{{player.s_turn()}}
+{{player.is_playable()}}
+{% if 1 %}
+very slow
+{{player.usable_cards()}}
+{% endif %}
+
+<dl class="block hand player-{{ player.side }}">
+  {% if game.is_started and player.s_turn() %}
+    <dt class="notice">★★ {{ player.name() }} のプレー中です ★★</dt>
+  {% else %}
+    <dt>{{ player.name() }} 手札</dt>
+  {% endif %}
+  <dd class="hand-cards"><ul>
+    {% for card in player.hand %}
+      <li><label>{{ helper.render_card(card, 0) }}</label></li>
+    {% endfor %}
+  </ul></dd>
+  <dd class="tactics-count">戦術カード使用数 {{ player.tactics_count }}</dd>
+  <dd class="clear"></dd>
+</dl>
+

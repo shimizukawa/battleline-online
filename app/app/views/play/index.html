@@ -1,0 +1,52 @@
+<div id="update_info"></div>
+
+{% include '_information.html' %}
+
+<form action="action" name="action" method="POST">
+
+  <div class="game-wrapper">
+    {% with player = round.opponent_player %}
+      {% if game.is_closed %}
+        {% include '_player_hand_open.html' %}
+      {% else %}
+        {% include '_player_hand_close.html' %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="field-wrapper">
+      {% include '_stock_troops.html' %}
+      {% include '_field.html' %}
+      {% include '_stock_tactics.html' %}
+      {% include '_stock_discards.html' %}
+{% if 0 %}
+      {% include '_proof.html' %}
+      {% include '_tactics_setup.html' %}
+{% endif %}
+      <div style="clear:both;"></div>
+    </div>
+
+
+    {% with player = round.my_player %}
+      {% if game.is_started %}
+        {% include '_player_hand_open.html' %}
+      {% else %}
+        {% include '_player_hand_close.html' %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+{% if 0 %}
+  <dl class="process-history">
+    <dt>手順履歴</dt>
+      <dd>
+      <%- rounds_for_display_process(3).each_with_index do |round, i| -%>
+        {% include '_play_process.html' %} <!-- :locals => {:round => round, :index => i} %> -->
+      <%- end -%>
+      <div style="clear:both;"></div>
+    </dd>
+  </dl>
+{% endif %}
+  
+  <div style="clear:both;"></div>
+</form>
+

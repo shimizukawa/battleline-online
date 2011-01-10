@@ -1,0 +1,13 @@
+<dl class="block">
+  <dt>戦術カード山</dt>
+  <dd>{{ helper.render_card(round.tactics, 0, 0) }}</dd>
+  <dd>あと {{ round.tactics|length }} 枚</dd>
+  {% if 0 %}
+  <dd><%= submit_tag2 'drow tactics' if tactics_drowable? %></dd>
+  {% endif %}
+  <dd>
+    {% if round.is_tactics_drowable %}
+    <input type="submit" name="drow_tactics" value='drow tactics'>
+    {% endif %}
+  </dd>
+</dl>

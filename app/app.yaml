@@ -32,5 +32,9 @@ handlers:
   script: app/controllers/game.py
   login: required
 
+- url: /play($|/.*)
+  script: app/controllers/play.py
+  login: required
+
 - url: /
   script: app/controllers/misc.py

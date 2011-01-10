@@ -1,0 +1,9 @@
+<dl class="block">
+  <dt>捨札</dt>
+  <dd>{{ round.discards|length }} 枚</dd>
+  <dd><ol>
+    {% for item in round.discards %}
+    <li>{{ helper.render_card(item) }}</li>
+    {% endfor %}
+  </ol></dd>
+</dl>

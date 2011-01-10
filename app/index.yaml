@@ -15,8 +15,24 @@ indexes:
   - name: user
   - name: _state
 
+- kind: Line
+  properties:
+  - name: player
+  - name: num
+
+- kind: Player
+  properties:
+  - name: round
+  - name: side
+
 - kind: Round
   properties:
   - name: game
   - name: created_at
+    direction: desc
+
+- kind: Round
+  properties:
+  - name: game
+  - name: turn
     direction: desc

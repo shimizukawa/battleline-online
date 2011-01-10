@@ -1,0 +1,14 @@
+<dl class="block">
+  <dt>部隊カード山</dt>
+  <dd>{{ helper.render_card(round.troops, 0, 0) }}</dd>
+  <dd>あと {{ round.troops|length }} 枚</dd>
+  {% if 0 %}
+  <dd><%= submit_tag2 'drow troop' if troop_drowable? %></dd>
+  {% endif %}
+  <dd>
+    {% if round.is_troop_drowable %}
+    <input type="submit" name="drow_troop" value='drow troop'>
+    {% endif %}
+  </dd>
+</dl>
+

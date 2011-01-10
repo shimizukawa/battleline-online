@@ -5,7 +5,7 @@ from google.appengine.api import users
 import random
 from lib.utils import *
 from game import *
-from card import *
+from card import CardListProperty, TROOPS, TACTICS
 from state import *
 
 __all__ = ['Round','RoundProcess','Line','Player']
@@ -15,18 +15,18 @@ class Round(db.Model):
     game = db.ReferenceProperty(Game, required=True)
     turn = db.IntegerProperty(required=True, default=0)
     flags = db.ListProperty(int, default=[-1]*9) # Player.key
-    _troops = db.ListProperty(db.Key) # TroopCard
-    _tactics = db.ListProperty(db.Key) # TacticsCard
-    _discards = db.ListProperty(db.Key) # Card
+    _troops = db.ListProperty(str) # TroopCard
+    _tactics = db.ListProperty(str) # TacticsCard
+    _discards = db.ListProperty(str) # Card
     state = db.StringProperty(required=True, default='StartState') # State class's name # TODO: can't set class object
     current_side = db.IntegerProperty(default=0, required=True)
     created_at = db.DateTimeProperty(auto_now_add=True)
     updated_at = db.DateTimeProperty(auto_now=True)
 
     # wrapper
-    troops = ListPropertyAccessor('_troops')
-    tactics = ListPropertyAccessor('_tactics')
-    discards = ListPropertyAccessor('_discards')
+    troops = CardListProperty('_troops')
+    tactics = CardListProperty('_tactics')
+    discards = CardListProperty('_discards')
 
     # like named_scope ...
     process = property(lambda s:s.roundprocess_set)
@@ -52,35 +52,33 @@ class Round(db.Model):
                     l.put()
             return r
 
-        def initialize_txn(round, players, troops, tactics):
-            r = db.get(round)
+        def initialize_txn(round_key, player_keys):
+            r = db.get(round_key)
             # troops
+            troops = TROOPS[:]
             random.shuffle(troops)
-            r._troops = troops
+            r.troops = troops
 
             # tactics
+            tactics = TACTICS[:]
             random.shuffle(tactics)
-            r._tactics = tactics
+            r.tactics = tactics
 
             # hands
-            for p in key2obj(players):
+            for p in key2obj(player_keys):
                 h = []
                 for c in range(7):
-                    h.append(r._troops.pop(0))
-                p._hand = sorted(h)
+                    h.append(r.troops.pop(0))
+                p.hand = sorted(h)
                 p.put()
-            #r.put()
             db.put(r)
             return r
 
         user_keys = obj2key(game.users)
         r = db.run_in_transaction(create_txn, game.key(), user_keys)
         if game.rounds.count() == 1:
-            troops = Card.create_troops()
-            tactics = Card.create_tactics()
             r = db.run_in_transaction(initialize_txn, r.key(),
-                                      obj2key(r.players),
-                                      obj2key(troops), obj2key(tactics))
+                                      obj2key(r.players))
         return r
 
     def __init__(self, *args, **kw):
@@ -340,7 +338,7 @@ class RoundProcess(db.Model):
 
 
 class Player(db.Model):
-    _hand = db.ListProperty(db.Key, required=True) # card keys
+    _hand = db.ListProperty(str, required=True) # card keys
     tactics_count = db.IntegerProperty(default=0, required=True)
     round = db.ReferenceProperty(Round, required=True)
     user = db.ReferenceProperty(GameUser, required=True)
@@ -352,7 +350,7 @@ class Player(db.Model):
     lines_s = lambda s,num:s.lines.filter('num =',num).get()
 
     # wrapper
-    hand = ListPropertyAccessor('_hand')
+    hand = CardListProperty('_hand')
 
     def name(self):
         # game.users[player-1].name rescue "Player#{player}" # ruby code
@@ -385,8 +383,8 @@ class Player(db.Model):
 
 
 class Line(db.Model):
-    _field = db.ListProperty(db.Key)
-    _weather = db.ListProperty(db.Key)
+    _field = db.ListProperty(str)
+    _weather = db.ListProperty(str)
     limit = db.IntegerProperty(default=3, required=True)
     is_proved = db.BooleanProperty(default=False, required=True)
     num = db.IntegerProperty(required=True)
@@ -395,8 +393,8 @@ class Line(db.Model):
     updated_at = db.DateTimeProperty(auto_now=True)
 
     # wrapper
-    field = ListPropertyAccessor('_field')
-    weather = ListPropertyAccessor('_weather')
+    field = CardListProperty('_field')
+    weather = CardListProperty('_weather')
 
     #def limit(self):
     #    #FIXME: MudCard class vs weather keys

@@ -1,0 +1,23 @@
+<span class="card {% if front %}{{ helper.recent_play_style(card) }}{% endif %}">
+{% if not card %}
+  <span class="card-none">-</span>
+{% else %}
+  {% if front %}
+    {% if card.is_troop %}
+      <span class="card-front card-color-{{card.color}}">
+        {{ card }}
+      </span>
+    {% else %}
+      <span class="card-front card-color-tactics">
+        {{ card }}
+      </span>
+    {% endif %}
+  {% else %}
+    {% if card.is_troop %}
+      <span class="card-back card-troop">TROOP</span>
+    {% else %}
+      <span class="card-back card-tactics">TACTICS</span>
+    {% endif %}
+  {% endif %}
+{% endif %}
+</span>

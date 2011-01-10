@@ -1,0 +1,28 @@
+<dl class="block">
+  <dt>場</dt>
+  <dd>
+  <table class="field-grid">
+  {% with p = round.opponent_player %}
+  <tr>{{ helper.field_flag_tag(p) }}</tr>
+  <tr>{{ helper.field_tag(1,1,p) }}</tr>
+  <tr>{{ helper.field_tag(1,0,p) }}</tr>
+  <tr>{{ helper.field_tag(0,3,p) }}</tr>
+  <tr>{{ helper.field_tag(0,2,p) }}</tr>
+  <tr>{{ helper.field_tag(0,1,p) }}</tr>
+  <tr>{{ helper.field_tag(0,0,p) }}</tr>
+  {% endwith %}
+  <tr>{{ helper.field_flag_tag() }}</tr>
+  {% with p = round.my_player %}
+  <tr>{{ helper.field_tag(0,0,p) }}</tr>
+  <tr>{{ helper.field_tag(0,1,p) }}</tr>
+  <tr>{{ helper.field_tag(0,2,p) }}</tr>
+  <tr>{{ helper.field_tag(0,3,p) }}</tr>
+  <tr>{{ helper.field_tag(1,0,p) }}</tr>
+  <tr>{{ helper.field_tag(1,1,p) }}</tr>
+  <tr>{{ helper.field_flag_tag(p) }}</tr>
+  <tr>{{ helper.field_select_tag(p) }}</tr>
+  {% endwith %}
+  </table>
+  </dd>
+</dl>
+

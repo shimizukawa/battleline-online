@@ -50,7 +50,7 @@ class ControllerBase(webapp.RequestHandler):
     def render(self, filename, template_values={}, layout='application.html'):
         values = self._v.copy()
         values.update(template_values)
-        values['helper'] = Helper(self)
+        values['helper'] = Helper(self, values)
 
         apppath = self._app_path
         viewpath = os.path.join(apppath, 'views', self._controller_name, filename)
