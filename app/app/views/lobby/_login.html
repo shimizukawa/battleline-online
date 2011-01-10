@@ -1,8 +1,8 @@
-{% if not helper.is_logged_in %}
+{% if not helper.is_logged_in() %}
 <div id="login">
 <dl>
     <dt>
-        <a href="{{helper.login_url}}">Googleアカウントでログイン</a>
+        <a href="{{ helper.login_url() }}">Googleアカウントでログイン</a>
     </dt>
 </dl>
 </form>

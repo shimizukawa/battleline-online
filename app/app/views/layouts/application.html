@@ -21,7 +21,7 @@
   <div id="menu">
     <ul>
       <li><a href="/lobby">ロビー</a></li>
-      {% if helper.is_logged_in %}
+      {% if helper.is_logged_in() %}
           {% if game %}
               <li><a href="/play">第 {{game.stage}} ゲーム</a></li>
               <li>第 {{game.turn}} ターン</li>
@@ -32,7 +32,7 @@
   </div>
   <div id="userinfo">
     <ul>
-      {% if helper.is_logged_in %}
+      {% if helper.is_logged_in() %}
           <li>{{ helper.login_name() }}</li>
           <li><a href="{{ helper.logout_url() }}">ログアウト</a></li>
       {% else %}
