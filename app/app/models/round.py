@@ -353,8 +353,7 @@ class Player(db.Model):
     hand = CardListProperty('_hand')
 
     def name(self):
-        # game.users[player-1].name rescue "Player#{player}" # ruby code
-        return "Player%d" % self.side
+        return self.user
 
     def s_turn(self):
         """ player.s_turn => True or False"""
@@ -377,7 +376,7 @@ class Player(db.Model):
 
     def usable_cards(self):
         return [card for card in self.hand if card.is_usable(self)]
- 
+
     def usable_lines(self):
         return [line for line in self.lines if line.is_usable()]
 
