@@ -33,7 +33,7 @@
   <div id="userinfo">
     <ul>
       {% if helper.is_logged_in %}
-          <li>{{ helper.login_name }}</li>
+          <li>{{ helper.login_name() }}</li>
           <li><a href="{{ helper.logout_url() }}">ログアウト</a></li>
       {% else %}
           <li>未ログイン</li>
