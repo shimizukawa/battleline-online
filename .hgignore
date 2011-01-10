@@ -1,0 +1,12 @@
+^.installed.cfg
+.*.pyc
+.*.swp
+^bin$
+^build$
+^develop-eggs$
+^dist/.*$
+^eggs/.*$
+^parts/.*$
+^app/distlib(.zip)?$
+.*.egg-info
+

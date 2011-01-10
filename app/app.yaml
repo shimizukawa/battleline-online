@@ -1,0 +1,21 @@
+application: battleline-online
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /_ah/remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /stylesheets
+  static_dir: public/stylesheets
+
+- url: /javascripts
+  static_dir: public/javascripts
+
+- url: /images
+  static_dir: public/images
+
+- url: /.*
+  script: main.py
