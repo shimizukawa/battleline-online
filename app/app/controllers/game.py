@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
 from app.controllers.controller import ApplicationController
-from app.models.game import Game, GameUser
-from app.models.round import Round
+from app.models.game import Game
 
 class GameController(ApplicationController):
 
