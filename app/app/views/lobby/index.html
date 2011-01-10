@@ -1,0 +1,30 @@
+{% include '_login.html' %}
+
+<div id="gamelist">
+  <dl>
+    <dt>ゲーム一覧</dt>
+    {% for game in helper.gamelist() %}
+    <dd>第 {{ game.stage }} ゲーム
+        ({{ game.users|join(",") }}
+         {{ game.users.count() }} 名
+         {% if game.is_playing %}/ ターン{{ game.turn }}{% endif %}
+        ):
+        {% if user %}
+          {% if user.game.key == game.key %}
+            <a href="">再入室</a>
+          {% endif %}
+        {% else %}
+          {% if helper.is_logged_in or game.is_joinnable %}
+          <a href="/game/join/{{game.key()}}">参加</a>
+          {% endif %}
+        {% endif %}
+    </dd>
+    {% endfor %}
+    <dd>
+      {% if helper.is_logged_in %}
+      <a href="/game/create">新規ゲームを作成</a>
+      {% endif %}
+    </dd>
+  </dl>
+</div>
+

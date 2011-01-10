@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-from google.appengine.ext.webapp import template
 from google.appengine.ext import webapp
 
 from app.helpers import Helper
 from lib.hooks import hook, Hooks
+from lib import template
 
 __all__ = ['ControllerBase', 'StopRequestProcess']
 

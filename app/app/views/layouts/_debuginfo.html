@@ -3,11 +3,11 @@
 
   <dl>
     <dt>ゲーム一覧</dt>
-    {% for game in helper.gamelist %}
+    {% for game in helper.gamelist() %}
     <dd>第 {{ game.stage }} ゲーム
-        ({{ game.users|join:"," }}
-         {{ game.users.count }} 名):
-        <a href="{% url DebugController "close_game",game.key %}">強制終了</a>
+        ({{ game.users|join(",") }}
+         {{ game.users.count() }} 名):
+         <a href="/debug/close_game/{{game.key()}}">強制終了</a>
     </dd>
     {% endfor %}
   </dl>
@@ -16,10 +16,10 @@
     <dt>現在プレー中のユーザー ({{ helper.playing_users.count }}名)</dt>
     <dd>
         <ol>
-        {% for user in helper.playing_users %}
+        {% for user in helper.playing_users() %}
         <li>
           {{ user }}
-          (<a href="{% url DebugController "logout_user",user.key %}">ログアウト</a>)
+          (<a href="/debug/logout_user/{{user.key()}}">ログアウト</a>)
         </li>
         {% endfor %}
         </ol>

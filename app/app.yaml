@@ -8,6 +8,10 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
 
+- url: /admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
 - url: /stylesheets
   static_dir: public/stylesheets
 
@@ -17,5 +21,16 @@ handlers:
 - url: /images
   static_dir: public/images
 
-- url: /.*
-  script: main.py
+- url: /lobby($|/.*)
+  script: app/controllers/lobby.py
+
+- url: /debug($|/.*)
+  script: app/controllers/debug.py
+  login: admin
+
+- url: /game($|/.*)
+  script: app/controllers/game.py
+  login: required
+
+- url: /
+  script: app/controllers/misc.py

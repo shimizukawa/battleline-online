@@ -20,12 +20,12 @@
 <div id="navigation">
   <div id="menu">
     <ul>
-      <li><a href="{% url MainPage %}">ロビー</a></li>
+      <li><a href="/lobby">ロビー</a></li>
       {% if helper.is_logged_in %}
           {% if game %}
-              <li><%= link_to "第 #{@game.stage} ゲーム", :controller=>:play %></li>
-              <li><%= "第 #{@game.rounds[-1].turn} ターン" %></li>
-              <li>経過時間 <%= progress_time @game.rounds[-1] %></li>
+              <li><a href="/play">第 {{game.stage}} ゲーム</a></li>
+              <li>第 {{game.turn}} ターン</li>
+              <li>経過時間 {{ helper.progress_time(game) }}</li>
           {% endif %}
       {% endif %}
     </ul>
@@ -34,7 +34,7 @@
     <ul>
       {% if helper.is_logged_in %}
           <li>{{ helper.login_name }}</li>
-          <li><a href="{{ helper.logout_url }}">ログアウト</a></li>
+          <li><a href="{{ helper.logout_url() }}">ログアウト</a></li>
       {% else %}
           <li>未ログイン</li>
       {% endif %}

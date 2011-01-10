@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from google.appengine.api import users
-from controller_base import *
-from app.models import *
+from lib.controllers.controller_base import ControllerBase
 from lib.hooks import hook
+from app.models import GameUser
 
-__all__ = ['ApplicationController', 'StopRequestProcess']
+__all__ = ['ApplicationController']
 
 
 class ApplicationController(ControllerBase):

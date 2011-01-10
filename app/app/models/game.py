@@ -84,6 +84,8 @@ class Game(db.Model):
 
     @property
     def turn(self):
+        if self.rounds.count() == 0:
+            return 0
         return self.rounds.order('-created_at').get().turn
 
 

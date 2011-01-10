@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: user
   - name: _state
+
+- kind: Round
+  properties:
+  - name: game
+  - name: created_at
+    direction: desc

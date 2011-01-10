@@ -38,8 +38,10 @@ class Helper(object):
     def logout_url(self):
         return users.create_logout_url(self.controller.request.uri)
 
-    def progress_time(self, round):
-        secs = time.time() - round.first.created_at
+    def progress_time(self, game):
+        if game.rounds.count() == 0:
+            return '0:00:00'
+        secs = time.time() - game.rounds[0].created_at
         h = secs / 3600
         m = secs / 60 % 60
         s = secs % 60
