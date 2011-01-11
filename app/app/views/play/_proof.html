@@ -1,22 +1,30 @@
 <dl class="block">
   <dd>
     <div>
-      <%= select_tag :proveline, options_for_select(provable_lines) if provable? %>
-      <%= submit_tag2 'proof', :disabled => !provable?, :onclick => "return #{confirm_javascript_function("確保宣言しますか？")}" %>
+      {% if helper.is_provable() %}
+      <select id="proveline" name="proveline">
+        {% for idx in helper.provable_lines %}
+        <option value="{{idx}}">{{idx+1}}</option>
+        {% endfor %}
+      </select>
+        {{ helper.submit_tag2('proof', onclick="return confirm('確保宣言しますか？')") }}
+      {% else %}
+        {{ helper.submit_tag2('proof', disabled='disabled') }}
+      {% endif %}
     </div>
-    <%- if @round.state? ProofJudgeState -%>
+    {% if round.is_state('ProofJudgeState') %}
     <dl>
       <dt>Line(<%= proving_line %>) の確保宣言。判定中...</dt>
     </dl>
-    <%- end -%>
-    <%- if need_to_judge? -%>
+    {% endif %}
+    {% if helper.is_need_to_judge() %}
     <dl>
       <dt>了承しますか？</dt>
       <dd>
-        <%= submit_tag2 'agree' %>
-        <%= submit_tag2 'disagree' %>
+        {{ helper.submit_tag2('agree') }}
+        {{ helper.submit_tag2('disagree') }}
       </dd>
     </dl>
-    <%- end -%>
+    {% endif %}
   </dd>
 </dl>

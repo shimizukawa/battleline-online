@@ -78,13 +78,15 @@ class Helper(object):
             values['card'] = card[index]
         return template.render(viewpath, values)
 
-#    def submit_tag2(self, *args):
-#        tag = submit_tag(*args) # ruby code...
-#        if 'disabled' in tag:
-#            return tag
-#        else:
-#            return '<span class="button-highlight">%s</span>' % tag
-#
+    def submit_tag2(self, value, **attrs):
+        #tag = submit_tag(*args) # ruby code...
+        opt = ' '.join('%s="%s"' % item for item in attrs.items())
+        tag = '<input type="submit" value="%s" %s>' % (value, opt)
+        if 'disabled' in tag:
+            return tag
+        else:
+            return '<span class="button-highlight">%s</span>' % tag
+
     def field_tag(self, rowtype, rowid, player):
         ROW_TYPES = {
             0: 'field',
@@ -176,17 +178,16 @@ class Helper(object):
             return False
         elif not round.my_player.usable_lines():
             return True
- 
-#   def is_provable
-#     if not @round.is_my_side
-#       false
-#     elsif @round.state? StartState
-#       true
-#     else
-#       false
-#     end
-#   end
-# 
+
+    def is_provable(self):
+        round = self.context.get('round')
+        if not round.is_my_side:
+            return False
+        elif round.is_state('StartState'):
+            return True
+        else:
+            return False
+
 #   def is_need_to_proof
 #     if not @round.is_my_side
 #       false
@@ -196,25 +197,26 @@ class Helper(object):
 #       false
 #     end
 #   end
-# 
-#   def is_need_to_judge
-#     if round.is_my_side:
-#       false
-#     elsif @round.state? ProofJudgeState
-#       true
-#     else
-#       false
-#     end
-#   end
-# 
+
+    def is_need_to_judge(self):
+        round = self.context.get('round')
+        if round.is_my_side:
+            return False
+        elif round.is_state('ProofJudgeState'):
+            return True
+        else:
+            return False
+
 #   def proving_line
 #     @round.process[ProofSelectState.to_s.to_sym]
 #   end
 # 
-#   def provable_lines
-#     (1..9).find_all{|n| !@round.line_proved n}
-#   end
- 
+
+    @property
+    def provable_lines(self):
+        round = self.context.get('round')
+        return [i for i,x in enumerate(round.flags) if x != -1]
+
     def recent_play_style(self, card):
         round = self.context.get('round')
         return ''
