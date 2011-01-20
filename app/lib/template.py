@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 
 def render(path, value_dict):
     env = Environment(
+        #autoescape=True,
         extensions=['jinja2.ext.with_', 'jinja2.ext.autoescape'],
         loader=FileSystemLoader(os.path.dirname(path))
     )
