@@ -174,7 +174,7 @@ class Helper(object):
         round = self.context.get('round')
         if not round.is_my_side:
             return False
-        elif not(round.is_state(PlayCardState) or round.is_state(StartState)):
+        elif not(round.is_state('PlayCardState') or round.is_state('StartState')):
             return False
         elif not round.my_player.usable_lines():
             return True
