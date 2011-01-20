@@ -18,15 +18,34 @@ class Round(db.Model):
     _troops = db.ListProperty(str) # TroopCard
     _tactics = db.ListProperty(str) # TacticsCard
     _discards = db.ListProperty(str) # Card
-    state = db.StringProperty(required=True, default='StartState') # State class's name # TODO: can't set class object
+    _state = db.StringProperty(required=True, default='StartState') # State class's name # TODO: can't set class object
     current_side = db.IntegerProperty(default=0, required=True)
     created_at = db.DateTimeProperty(auto_now_add=True)
     updated_at = db.DateTimeProperty(auto_now=True)
 
-    # wrapper
+    # card wrapper
     troops = CardListProperty('_troops')
     tactics = CardListProperty('_tactics')
     discards = CardListProperty('_discards')
+
+    # state wrapper
+    @apply
+    def state():
+        def get(self):
+            return StateBase.instance(self._state, self)
+
+        def set(self, state_class):
+            old = self.state
+            new = StateBase.instance(state_class, self)
+
+            # transition
+            old.out_state_process(new)
+            self._state = str(new)
+            new.in_state_process(old)
+
+            return self.state
+
+        return property(get, set)
 
     # like named_scope ...
     process = property(lambda s:s.roundprocess_set)
@@ -146,19 +165,6 @@ class Round(db.Model):
 
     def last(self):
         return self.game.rounds.order('-turn').get()
-
-#    def state(self):
-#        (self['state'] or NullState.new(self)).renew(self)
-#
-#    def state= state_class
-#        old = self.state
-#        new = state_class.new(self)
-#
-#        old.out_state_process(new)
-#        self['state'] = new
-#        new.in_state_process(old)
-#
-#        return self.state
 
     def _get_card_from_lines(self, card, player, troop_only=False):
         for line in player.lines:

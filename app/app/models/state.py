@@ -22,6 +22,19 @@ class StateBase(object):
 #        instance_variables.find_all{|name|name!='self.round'}.sort
 #    end
 
+    @classmethod
+    def instance(cls, klass, round):
+        if isinstance(klass, basestring):
+            if klass in globals():
+                klass = globals()[klass]
+            else:
+                klass = NullState
+        elif isinstance(klass, StateBase):
+            pass
+        else:
+            raise ValueError('%r must basestring or StateBase delivered class')
+        return klass(round)
+
     def __init__(self, round):
         self.round = round
 
