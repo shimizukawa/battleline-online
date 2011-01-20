@@ -1,6 +1,7 @@
 {% if 0 %}
 very slow
-{{player.usable_cards()}}
+{{player.usable_cards()|e}}
+{{player.is_playable()}}
 {% endif %}
 
 <dl class="block hand player-{{ player.side }}">
