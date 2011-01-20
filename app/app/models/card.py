@@ -108,7 +108,9 @@ class TroopCard(Card):
 
 
 class TacticsCard(Card):
-    pass
+
+    def __init__(self, name):
+        self.name = name
 
 
 class SpiritCard(TacticsCard):
