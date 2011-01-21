@@ -45,6 +45,10 @@ def main():
         ('^/play/([^/]*)$', PlayController),
         ('^/play/([^/]*)/(.*)$', PlayController),
     ])
+
+    from google.appengine.ext.appstats import recording
+    application = recording.appstats_wsgi_middleware(application)
+
     run_wsgi_app(application)
 
 if __name__ == "__main__":
