@@ -225,11 +225,6 @@ class HooksTest(unittest.TestCase):
         self.assertEqual(3, obj.value3)
 
 
-def test_suite():
-    return unittest.TestSuite((
-        TestSuite(HooksTest),
-    ))
-
 if __name__ == '__main__':
     unittest.main()
 
