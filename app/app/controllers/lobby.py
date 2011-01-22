@@ -33,15 +33,18 @@ class LobbyController(ApplicationController):
         return self.render('waiting.html')
 
 
-def main():
+def application():
     from google.appengine.ext import webapp
     from google.appengine.ext.webapp.util import run_wsgi_app
 
-    application = webapp.WSGIApplication([
+    return webapp.WSGIApplication([
         ('^/lobby', LobbyController),
         ('^/lobby/([^/]*)(/.*)?$', LobbyController),
     ])
-    run_wsgi_app(application)
+
+
+def main():
+    run_wsgi_app(application())
 
 if __name__ == "__main__":
     main()
