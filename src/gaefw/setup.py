@@ -32,9 +32,14 @@ setup(
     package_data = {'': ['buildout.cfg']},
     include_package_data=True,
     install_requires=[
-       'setuptools',
-       'nose',
+        'setuptools',
+        'jinja2',
     ],
+    extras_require = {
+        'test': [
+            'nose',
+        ],
+    },
     entry_points = {
         'nose.plugins.0.10': [
             'gaefw.test.gaeplugin = gaefw.test.gaeplugin:Test',
