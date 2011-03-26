@@ -5,16 +5,13 @@ from app.models import Game, GameUser
 import os
 import time
 
-from lib import template
+from gaefw import template
+from gaefw.helper import HelperBase
 
 from lib.utils import *
 
 
-class Helper(object):
-
-    def __init__(self, controller, context=None):
-        self.controller = controller
-        self.context = context
+class Helper(HelperBase):
 
     def is_logged_in(self):
         return bool(self.login_user())

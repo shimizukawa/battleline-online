@@ -3,9 +3,8 @@
 import os, sys
 from google.appengine.ext import webapp
 
-from app.helpers import Helper
-from lib.hooks import hook, Hooks
-from lib import template
+from gaefw.hooks import hook, Hooks
+from gaefw import template
 
 __all__ = ['ControllerBase', 'StopRequestProcess']
 
@@ -24,6 +23,7 @@ class StopRequestProcess(Exception):
 
 class ControllerBase(webapp.RequestHandler):
     hooks = Hooks()
+    helper_factory = None
 
     def __init__(self, *args, **kw):
         super(ControllerBase, self).__init__(*args, **kw)
@@ -50,7 +50,7 @@ class ControllerBase(webapp.RequestHandler):
     def render(self, filename, template_values={}, layout='application.html'):
         values = self._v.copy()
         values.update(template_values)
-        values['helper'] = Helper(self, values)
+        values['helper'] = self.helper_factory(self, values)
 
         apppath = self._app_path
         viewpath = os.path.join(apppath, 'views', self._controller_name, filename)

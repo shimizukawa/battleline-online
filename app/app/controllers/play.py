@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-from lib.controllers.controller_base import StopRequestProcess
+from gaefw.hooks import hook
+from gaefw.controllers.controller_base import StopRequestProcess
 from app.controllers.controller import ApplicationController
-from lib.hooks import hook
 #from app.models.game import Game, GameUser
 #from app.models.round import Round
 
