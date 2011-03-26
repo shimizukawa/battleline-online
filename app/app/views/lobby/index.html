@@ -21,7 +21,7 @@
     </dd>
     {% endfor %}
     <dd>
-      {% if helper.is_logged_in %}
+      {% if helper.is_logged_in() %}
       <a href="/game/create">新規ゲームを作成</a>
       {% endif %}
     </dd>
